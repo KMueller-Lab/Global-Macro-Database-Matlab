@@ -1,0 +1,32 @@
+name: Publish to GitHub Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-toolbox:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up MATLAB
+      uses: matlab-actions/setup-matlab@v2
+
+    - name: Build toolbox
+      uses: matlab-actions/run-command@v2
+      with:
+        command: "outFile = package_toolbox(); exit(0);"
+
+    - name: Upload toolbox to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./Global-Macro-Database.mltbx
+        asset_name: Global-Macro-Database.mltbx
+        asset_content_type: application/octet-stream

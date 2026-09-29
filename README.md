@@ -30,17 +30,35 @@ This repository complements the paper, **Müller, Xu, Lehbib, and Chen (2025)**,
 
 ## Installation
 
-<a href="https://www.globalmacrodata.com/data.html" target="_blank" rel="noopener noreferrer">Download via website</a>
-
 Requires MATLAB R2020b or newer.
 
+<a href="https://www.globalmacrodata.com/data.html" target="_blank" rel="noopener noreferrer">Download via website</a> | <a href="https://github.com/KMueller-Lab/Global-Macro-Database-Matlab/releases" target="_blank" rel="noopener noreferrer">Download from GitHub Releases</a>
+
+### Option 1: Install as Toolbox Add-On (recommended)
+
+Download `Global-Macro-Database.mltbx` from [GitHub Releases](https://github.com/KMueller-Lab/Global-Macro-Database-Matlab/releases), then double-click to install as a MATLAB Add-On.
+
 ```matlab
-% Option 1: clone the repository and add it to the MATLAB path
+% After installation, use it directly:
+df = globalmacrodata.gmd();
+```
+
+### Option 2: Clone and add to path
+
+```matlab
+% Clone the repository and add it to the MATLAB path
 addpath('Global-Macro-Database-Matlab')
 
-% Option 2: install the packaged toolbox as an Add-On
-%   double-click Global-Macro-Database.mltbx, or build it from the repo root:
+% Use the package
+df = globalmacrodata.gmd();
+```
+
+### Option 3: Build from source
+
+```matlab
+% From the repository root:
 outFile = package_toolbox();
+% Then double-click the generated Global-Macro-Database.mltbx
 ```
 
 ## Usage
