@@ -123,9 +123,10 @@ otherwise identical.
 3. [x] Core plumbing: `fetchFrom`, `readCsvRemote`, cache, `fail`, flag/year coercion.
 4. [x] Cached getters: versions, varlist, sources, bib.
 5. [x] `gmd.m` dispatcher, modes in the Python order (see limitations below).
-6. [ ] Port the Python fixtures for offline mocked tests to reach full parity.
-       Current suite: `tGmd` (offline validation) plus `tGmdLive` (network
-       integration against the helper tables), all green on R2026b.
+6. [x] Offline mocked tests for parity. A fixture backend seam (`useFixtures`,
+       routing every fetch and the cache dir to local files) drives `tGmdOffline`
+       (27 cases) fully offline; `tGmd` (validation) and `tGmdLive` (network)
+       round it out. 41 tests, all green on R2026b.
 7. [ ] Toolbox packaging (`.mltbx`), README polish.
 8. [ ] Set the repo description (needs admin) and announce.
 
