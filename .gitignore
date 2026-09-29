@@ -1,0 +1,16 @@
+# MATLAB
+*.asv
+*.mat
+*.mex*
+slprj/
+octave-workspace
+
+# Toolbox build output
+*.mltbx
+
+# Local cache
+.global_macro_data/
+
+# OS
+.DS_Store
+Thumbs.db
