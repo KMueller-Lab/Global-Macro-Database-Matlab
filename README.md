@@ -18,12 +18,13 @@
 
 This repository complements the paper, **Müller, Xu, Lehbib, and Chen (2025)**, which introduces a panel dataset of **79 macroeconomic variables across 243 countries** from historical records beginning in the year **1086** until **2025**, including projections through the year **2030**.
 
-> **Status:** work in progress, ported from the Python and R packages. The core
-> is working: data loading with variable, country, and year filters, `version`,
-> `vars`, `sources` (list/load), `cite`, `print_option`, and local caching. Two
-> modes are limited because that data is published only as Stata `.dta`, which
-> MATLAB cannot read: loading an individual source's data is not yet supported,
-> and the country list is derived from the dataset. See [`PLAN.md`](PLAN.md).
+> **Status:** ported from the Python and R packages and functional. All modes
+> work: data loading with variable, country, and year filters, `version`,
+> `vars`, `sources` (list/load and individual source data), `cite`, `country`,
+> `print_option`, and local caching. Reading the Stata `.dta` files the project
+> publishes is handled by a built-in reader (formats 114/115/117/118), so there
+> is no external dependency. Remaining: toolbox (`.mltbx`) packaging. See
+> [`PLAN.md`](PLAN.md).
 
 ## Features
 

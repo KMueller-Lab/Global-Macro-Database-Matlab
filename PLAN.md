@@ -134,20 +134,22 @@ otherwise identical.
 
 Working end to end: default variable/country load with case-insensitive
 matching and canonical casing, year range, `version` list/current/specific,
-`vars` list/load, `sources` list/load, `cite` load and single-key BibTeX,
+`vars` list/load, `sources` list/load and individual source data (including
+CS aliases), `cite` load and single-key BibTeX, `country` list/load,
 `print_option`, `fast` local caching and reload, and the offline version
 fallback. Verified live against the release bucket on R2026b.
 
-## MATLAB-port limitations (data served only as Stata .dta)
+## Stata .dta support (resolved)
 
-1. **Source-level data** (`gmd('sources','<name>')`): the `clean/combined/*`
-   tables are published only as `.dta`, with no CSV endpoint. Listing sources
-   and loading the source list work; loading one source's data raises a clear
-   `GMD:e501` until a `.dta` reader is added.
-2. **Country list** (`gmd('country','list'|'load')`): `helpers/countrylist.csv`
-   does not exist (only `.dta`), so the country table is derived from the
-   distinct `ISO3`/`countryname` values in the dataset. This downloads the
-   dataset the first time; results match the countries present in that vintage.
+The country list and source-level tables are published only as Stata `.dta`.
+A focused reader (`readDta`) now handles both the old binary format 114/115
+and the modern tagged formats 117/118/119 (no external dependency): it reads
+variable names, numeric types with Stata missing values mapped to NaN, and
+fixed-length strings. Value labels are ignored (unlabeled read, matching the
+Python `convert_categoricals=False`); strL long strings are not supported and
+raise a clear error if ever encountered. This unlocks `gmd('sources','<name>')`
+(including CS aliases) and `gmd('country','list'|'load')`, verified live
+against the format-118 bucket files.
 
 ## 9. Open decisions
 

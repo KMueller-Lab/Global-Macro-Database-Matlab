@@ -104,8 +104,25 @@ classdef tGmdOffline < matlab.unittest.TestCase
             tc.verifyGreaterThan(height(t), 0);
         end
 
-        function sourceDataUnsupported(tc)
-            tc.verifyError(@() globalmacrodata.gmd('sources','IMF_WEO'), 'GMD:e501');
+        function sourceDataLoads(tc)
+            df = globalmacrodata.gmd('sources','IMF_IFS');
+            tc.verifyClass(df, 'table');
+            tc.verifyTrue(all(ismember({'ISO3','year'}, df.Properties.VariableNames)));
+        end
+
+        function sourceVariableSelect(tc)
+            df = globalmacrodata.gmd('sources','IMF_IFS','variables','CA_USD');
+            tc.verifyTrue(ismember('IMF_IFS_CA_USD', df.Properties.VariableNames));
+        end
+
+        function sourceCsAliasResolves(tc)
+            % CS1_ARG normalizes to source ARG_1 with data columns prefixed CS1_.
+            df = globalmacrodata.gmd('sources','CS1_ARG','variables','M3_GDP');
+            tc.verifyTrue(ismember('CS1_M3_GDP', df.Properties.VariableNames));
+        end
+
+        function invalidSourceRaises(tc)
+            tc.verifyError(@() globalmacrodata.gmd('sources','NOPE'), 'GMD:e498');
         end
 
         % --- default load ---------------------------------------------------
@@ -172,12 +189,13 @@ classdef tGmdOffline < matlab.unittest.TestCase
         function countryListPrints(tc)
             out = evalc("globalmacrodata.gmd('country','list');");
             tc.verifySubstring(out, 'Available countries');
-            tc.verifySubstring(out, 'USA');
+            tc.verifySubstring(out, 'ARG');
         end
 
         function countryLoadReturnsTable(tc)
             t = globalmacrodata.gmd('country','load');
-            tc.verifyEqual(height(t), 3);
+            tc.verifyEqual(height(t), 10);
+            tc.verifyTrue(all(ismember({'ISO3','countryname'}, t.Properties.VariableNames)));
         end
 
         function isoAliasPrintsCountries(tc)

@@ -280,7 +280,11 @@ function df = gmd(opts)
     if (ischar(country) || (isstring(country) && isscalar(country))) ...
             && any(strcmpi(char(country), {'load', 'list'}))
         mode = lower(char(country));
-        ct = countriesFromDataset(selectedVersion, fast);
+        try
+            ct = countryTable();
+        catch
+            failWithIssue('country list');
+        end
         if strcmp(mode, 'load')
             df = ct;
         else
@@ -430,15 +434,73 @@ function df = dropAllMissingColumns(df)
     df = df(:, ~drop);
 end
 
-function out = loadSourceData(srcName, anything, countryArg) %#ok<INUSD,STOUT>
-    % MATLAB-port limitation: source-level data (clean/combined/<source>) is
-    % served only as Stata .dta, which MATLAB cannot read (no CSV endpoint
-    % exists, verified against the bucket). Listing sources
-    % (gmd('sources','list')) and loading the source list
-    % (gmd('sources','load')) work; loading an individual source's data does
-    % not until a .dta reader is added. See PLAN.md.
+function out = loadSourceData(srcName, anything, countryArg)
+    csColPrefix = '';
     name = strtrim(srcName);
-    fail(501, sprintf(['Loading source-level data (''%s'') is not supported in ' ...
-        'the MATLAB package yet: that data is only published as Stata .dta.'], name), ...
-        'Use gmd(''sources'',''list'') or gmd(''sources'',''load''), or use the Python or R package.');
+    if numel(name) == 7 && startsWith(name, 'CS')
+        parts = strsplit(name, '_');
+        csColPrefix = parts{1};
+        name = normalizeSourceName(name);
+    end
+    srcTokens = tokens(name);
+    if numel(srcTokens) > 1
+        fail(498, 'Warning: Please specify exactly one source.');
+    end
+    name = srcTokens{1};
+
+    try
+        srcDf = readDtaRemote(sprintf('clean/combined/%s.dta', name));
+    catch
+        try
+            srcList = sourceListTable();
+        catch
+            failWithIssue('source list');
+        end
+        mask = lower(string(srcList.source_name)) == lower(string(name));
+        if ~any(mask)
+            fail(498, 'Invalid source name', 'To load the list of sources: gmd(''sources'',''load'')');
+        end
+        matched = string(srcList.source_name(mask));
+        name = char(matched(1));
+        try
+            srcDf = readDtaRemote(sprintf('clean/combined/%s.dta', name));
+        catch
+            fail(498, sprintf('Unable to load data for source ''%s''.', name), ...
+                'Please check your internet connection or report this issue.');
+        end
+    end
+
+    prefix = name;
+    if ~isempty(csColPrefix)
+        prefix = csColPrefix;
+    end
+
+    if ~strcmp(anything, '')
+        srcCol = sprintf('%s_%s', prefix, anything);
+        if ismember(srcCol, srcDf.Properties.VariableNames)
+            keep = {};
+            for c = {'ISO3', 'year', srcCol}
+                if ismember(c{1}, srcDf.Properties.VariableNames)
+                    keep{end+1} = c{1}; %#ok<AGROW>
+                end
+            end
+            if ismember('countryname', srcDf.Properties.VariableNames)
+                keep{end+1} = 'countryname';
+            end
+            if ismember('id', srcDf.Properties.VariableNames)
+                keep{end+1} = 'id';
+            end
+            out = srcDf(:, keep);
+            if ~strcmp(countryArg, '')
+                target = upper(countryArg);
+                out = out(upper(string(out.ISO3)) == string(target), :);
+            end
+            return;
+        end
+        avail = stripSourcePrefix(srcDf.Properties.VariableNames, prefix);
+        fail(498, sprintf('This source doesn''t have data on %s. It has data on %s.', ...
+            anything, strjoin(avail, ' ')));
+    end
+
+    out = srcDf;
 end

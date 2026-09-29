@@ -53,9 +53,16 @@ classdef tGmdLive < matlab.unittest.TestCase
             tc.verifySubstring(out, '@');
         end
 
-        function sourceDataUnsupportedInMatlab(tc)
-            % Source-level data is Stata-only; the port reports this clearly.
-            tc.verifyError(@() globalmacrodata.gmd('sources','IMF_WEO'), 'GMD:e501');
+        function sourceDataLoads(tc)
+            df = globalmacrodata.gmd('sources','IMF_WEO');
+            tc.verifyClass(df, 'table');
+            tc.verifyTrue(ismember('ISO3', df.Properties.VariableNames));
+        end
+
+        function countryLoadReturnsTable(tc)
+            t = globalmacrodata.gmd('country','load');
+            tc.verifyClass(t, 'table');
+            tc.verifyTrue(all(ismember({'ISO3','countryname'}, t.Properties.VariableNames)));
         end
 
         function unknownVersionRaises(tc)
