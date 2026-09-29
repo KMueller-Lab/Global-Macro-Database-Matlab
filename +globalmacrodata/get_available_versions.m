@@ -15,7 +15,7 @@ function v = get_available_versions()
             v = cached;
             return;
         end
-        if exist(fullfile(cacheDir(), 'GMD.csv'), 'file')
+        if exist(fullfile(cacheDir(), 'GMD.dta'), 'file')
             v = {'local'};
             return;
         end

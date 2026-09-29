@@ -25,24 +25,32 @@ end
 % Modern tagged format (117/118/119)
 % =========================================================================
 function t = parseTagged(raw)
-    s = char(raw);
+    % Only the header (before </header>) is scanned for tags; the binary data
+    % section can contain byte sequences that look like tags (e.g. "<K>"), so
+    % searching the whole file would return spurious matches.
+    hdrEnd = firstIndex(strfind(char(raw(1:min(numel(raw), 4096))), '</header>'));
+    if isempty(hdrEnd)
+        hdrEnd = min(numel(raw), 4096);
+    end
+    hdr = char(raw(1:hdrEnd));
 
-    rel = regexp(s(1:min(numel(s), 400)), '<release>(\d+)</release>', 'tokens', 'once');
+    rel = regexp(hdr, '<release>(\d+)</release>', 'tokens', 'once');
     release = str2double(rel{1});
-    bo = regexp(s(1:min(numel(s), 400)), '<byteorder>(LSF|MSF)</byteorder>', 'tokens', 'once');
+    bo = regexp(hdr, '<byteorder>(LSF|MSF)</byteorder>', 'tokens', 'once');
     big = strcmp(bo{1}, 'MSF');
 
-    iK = strfind(s, '<K>') + 3;
+    iK = firstIndex(strfind(hdr, '<K>')) + 3;
     nvar = double(rdInt(raw(iK:iK + 1), 'uint16', big));
 
-    iN = strfind(s, '<N>') + 3;
+    iN = firstIndex(strfind(hdr, '<N>')) + 3;
     if release >= 118
         nobs = double(rdInt(raw(iN:iN + 7), 'uint64', big));
     else
         nobs = double(rdInt(raw(iN:iN + 3), 'uint32', big));
     end
 
-    iMap = strfind(s, '<map>') + numel('<map>');
+    % <map> follows </header>; take the first occurrence at/after the header.
+    iMap = firstIndex(strfind(char(raw(1:min(numel(raw), hdrEnd + 64))), '<map>')) + numel('<map>');
     mapvals = double(typecast(uint8(raw(iMap:iMap + 14 * 8 - 1)), 'uint64'));
     if big
         mapvals = double(swapbytes(uint64(mapvals)));
@@ -171,6 +179,14 @@ function out = decodeNumeric(fieldBytes, code, big)
     end
     out = double(vals(:));
     out(out > maxv | out < minv) = NaN;
+end
+
+function i = firstIndex(idx)
+    if isempty(idx)
+        i = [];
+    else
+        i = idx(1);
+    end
 end
 
 function v = rdInt(bytes, cls, big)

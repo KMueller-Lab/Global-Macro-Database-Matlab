@@ -1,36 +1,33 @@
 function df = datasetTable(ver, fast)
 %DATASETTABLE Load the full dataset for a version, using the local cache.
-%   Ports the default (non-raw) load path in Python gmd(). When FAST is true
-%   the downloaded CSV is persisted under the cache directory (written to a
-%   temp file then moved into place) so later calls reload from disk.
+%   Reads the versioned .dta release (via the built-in readDta) so values
+%   match the Stata/Python/R packages exactly; the CSV distribution rounds
+%   some values. When FAST is true the downloaded .dta is persisted under the
+%   cache directory (written to a temp file then moved into place) so later
+%   calls reload from disk.
 
     d = ensureCacheDir();
-    localVer = fullfile(d, sprintf('GMD_%s.csv', ver));
+    localVer = fullfile(d, sprintf('GMD_%s.dta', ver));
 
     if exist(localVer, 'file')
-        df = readCsvFile(localVer);
+        df = readDta(localVer);
         return;
     end
 
-    relPath = sprintf('distribute/GMD_%s.csv', ver);
+    relPath = sprintf('distribute/GMD_%s.dta', ver);
 
     if fast
-        tmp = [tempname, '.csv'];
+        tmp = [tempname, '.dta'];
         fetchFrom(relPath, tmp);
         info = dir(tmp);
         if isempty(info) || info.bytes == 0
             error('GMD:fetch', 'Refusing to cache empty file for %s', localVer);
         end
         movefile(tmp, localVer, 'f');
-        copyfile(localVer, fullfile(d, 'GMD.csv'), 'f');
+        copyfile(localVer, fullfile(d, 'GMD.dta'), 'f');
         emit(sprintf('GMD dataset loaded and saved locally in %s.', d));
-        df = readCsvFile(localVer);
+        df = readDta(localVer);
     else
-        df = readCsvRemote(relPath);
+        df = readDtaRemote(relPath);
     end
-end
-
-function t = readCsvFile(f)
-    t = readtable(f, 'Delimiter', ',', 'ReadVariableNames', true, ...
-        'VariableNamingRule', 'preserve', 'TextType', 'string');
 end

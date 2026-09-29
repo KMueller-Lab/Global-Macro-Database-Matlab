@@ -149,7 +149,7 @@ function df = gmd(opts)
         hasInternet = ~isempty(opts.network) && ~strcmp(char(string(opts.network)), '');
         emit('Error: Unable to access version information. Check internet connection.');
         emit('Loading local version');
-        localDefault = fullfile(cacheDir(), 'GMD.csv');
+        localDefault = fullfile(cacheDir(), 'GMD.dta');
         if ~exist(localDefault, 'file')
             fail(498, 'Local version not found');
         end
@@ -304,8 +304,7 @@ function df = gmd(opts)
         if isempty(gmdLocalPath)
             df = datasetTable(selectedVersion, fast);
         else
-            df = readtable(gmdLocalPath, 'Delimiter', ',', 'ReadVariableNames', true, ...
-                'VariableNamingRule', 'preserve', 'TextType', 'string');
+            df = readDta(gmdLocalPath);
         end
     end
     if isempty(df)
