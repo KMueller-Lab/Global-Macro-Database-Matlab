@@ -21,9 +21,9 @@ function outFile = package_toolbox()
         '1086 to 2030). Supports variable, country, and year filters, data ', ...
         'vintages, source-level data, citations, and local caching. ', ...
         'See https://www.globalmacrodata.com.'];
-    opts.AuthorName    = 'Mohamed Lehbib';
-    opts.AuthorEmail   = 'lehbib@u.nus.edu';
-    opts.AuthorCompany = 'National University of Singapore';
+    opts.AuthorName    = 'Riccardo Dal Cero';
+    opts.AuthorEmail   = 'dalcero@safe-frankfurt.de';
+    opts.AuthorCompany = 'Leibniz Institute for Financial Research (SAFE)';
 
     % Ship only the package and its docs, not tests or the build script.
     opts.ToolboxFiles = { ...
