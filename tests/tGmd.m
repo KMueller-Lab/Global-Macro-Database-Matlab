@@ -28,16 +28,5 @@ classdef tGmd < matlab.unittest.TestCase
             tc.verifyError(@() globalmacrodata.gmd('start_year',2020,'end_year',2000), 'GMD:e498');
         end
 
-        function booleanLikeFlagAccepted(tc)
-            % 'yes' is a valid boolean-like string, so validation passes and
-            % the call reaches the not-yet-implemented data load.
-            tc.verifyError(@() globalmacrodata.gmd('raw','yes','variables','rGDP'), ...
-                'GMD:notImplemented');
-        end
-
-        function defaultCallNotImplementedYet(tc)
-            tc.verifyError(@() globalmacrodata.gmd(), 'GMD:notImplemented');
-        end
-
     end
 end

@@ -120,12 +120,33 @@ otherwise identical.
 
 1. [x] Probe bucket for a CSV or Parquet full-dataset endpoint. **CSV confirmed.**
 2. [x] Scaffold repository: layout, README, LICENSE, PLAN, stubs, CI.
-3. [ ] Core plumbing: `fetchFrom`, `readCsvRemote`, cache, `fail`, flag/year coercion.
-4. [ ] Cached getters: versions, varlist, sources, bib, countries.
-5. [ ] `gmd.m` dispatcher, modes in the Python order.
-6. [ ] Port fixtures and the unittest suite; reach behavior parity.
-7. [ ] Toolbox packaging (`.mltbx`), CI green, README polish.
-8. [ ] Push via branch and PR, matching the Python workflow.
+3. [x] Core plumbing: `fetchFrom`, `readCsvRemote`, cache, `fail`, flag/year coercion.
+4. [x] Cached getters: versions, varlist, sources, bib.
+5. [x] `gmd.m` dispatcher, modes in the Python order (see limitations below).
+6. [ ] Port the Python fixtures for offline mocked tests to reach full parity.
+       Current suite: `tGmd` (offline validation) plus `tGmdLive` (network
+       integration against the helper tables), all green on R2026b.
+7. [ ] Toolbox packaging (`.mltbx`), README polish.
+8. [ ] Set the repo description (needs admin) and announce.
+
+## Implemented modes
+
+Working end to end: default variable/country load with case-insensitive
+matching and canonical casing, year range, `version` list/current/specific,
+`vars` list/load, `sources` list/load, `cite` load and single-key BibTeX,
+`print_option`, `fast` local caching and reload, and the offline version
+fallback. Verified live against the release bucket on R2026b.
+
+## MATLAB-port limitations (data served only as Stata .dta)
+
+1. **Source-level data** (`gmd('sources','<name>')`): the `clean/combined/*`
+   tables are published only as `.dta`, with no CSV endpoint. Listing sources
+   and loading the source list work; loading one source's data raises a clear
+   `GMD:e501` until a `.dta` reader is added.
+2. **Country list** (`gmd('country','list'|'load')`): `helpers/countrylist.csv`
+   does not exist (only `.dta`), so the country table is derived from the
+   distinct `ISO3`/`countryname` values in the dataset. This downloads the
+   dataset the first time; results match the countries present in that vintage.
 
 ## 9. Open decisions
 

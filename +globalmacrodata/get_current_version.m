@@ -1,6 +1,7 @@
 function v = get_current_version()
 %GET_CURRENT_VERSION Get the latest version string.
-%   Not implemented yet in the MATLAB port. See PLAN.md.
+%   Ports the Python get_current_version.
 
-    error('GMD:notImplemented', 'get_current_version is not implemented yet. See PLAN.md.');
+    all = globalmacrodata.get_available_versions();
+    v = all{1};
 end

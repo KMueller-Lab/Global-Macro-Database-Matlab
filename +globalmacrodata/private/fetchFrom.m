@@ -1,16 +1,40 @@
-function raw = fetchFrom(relPath) %#ok<INUSD>
-%FETCHFROM Fetch a file from the release bucket (S3 primary, GitHub mirror).
-%   Walks the data bases with retry and backoff, skipping retries on 4xx.
-%   The GitHub mirror only serves helpers/* tables. Returns the raw bytes or
-%   text. Not implemented yet in the MATLAB port. See PLAN.md, section 3.
-%
-%   Base URLs:
-%     https://gmd-releases.s3.ap-southeast-2.amazonaws.com/data
-%     (GitHub mirror for helpers/* only)
-%
-%   Full dataset and raw variables are read from the CSV endpoints
-%   (distribute/GMD_<ver>.csv, distribute/<var>_<ver>.csv); see PLAN.md
-%   section 2 for the format decision.
+function ok = fetchFrom(relPath, destFile, bases)
+%FETCHFROM Download a file from the release bucket to a local file.
+%   Walks BASES in order (S3 primary, then the GitHub mirror), retrying with
+%   exponential backoff and skipping retries on clear 4xx client errors.
+%   Ports the Python _fetch_from behavior. Throws GMD:fetch if every base and
+%   attempt fails. The GitHub mirror only serves helpers/* tables.
 
-    error('GMD:notImplemented', 'fetchFrom is not implemented yet. See PLAN.md.');
+    cfg = gmdConfig();
+    if nargin < 3 || isempty(bases)
+        bases = cfg.DataBases;
+    end
+
+    opts = weboptions('Timeout', cfg.Timeout, ...
+        'HeaderFields', {'User-Agent', cfg.UserAgent}, ...
+        'ContentType', 'binary');
+
+    errors = {};
+    for b = 1:numel(bases)
+        url = sprintf('%s/%s', bases{b}, relPath);
+        for attempt = 1:cfg.MaxRetries
+            try
+                websave(destFile, url, opts);
+                ok = true;
+                return;
+            catch ME
+                is4xx = contains(ME.identifier, 'HTTP4') || ...
+                        ~isempty(regexp(ME.message, '\<4\d\d\>', 'once'));
+                errors{end+1} = sprintf('%s: %s', url, ME.message); %#ok<AGROW>
+                if is4xx
+                    break;  % client error will not recover; try next base
+                end
+                if attempt < cfg.MaxRetries
+                    pause(cfg.BackoffBase * 2^(attempt - 1));
+                end
+            end
+        end
+    end
+
+    error('GMD:fetch', 'Unable to load ''%s''. %s', relPath, strjoin(errors, '; '));
 end
