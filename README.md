@@ -11,6 +11,7 @@
   <a href="https://www.globalmacrodata.com/research-paper.html" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Paper-Read-1E3A8A?style=flat-square&logo=readthedocs&logoColor=white" alt="Read the paper"></a>
   <a href="https://www.globalmacrodata.com/data.html" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Data-Download-0EA5E9?style=flat-square&logo=databricks&logoColor=white" alt="Download the data"></a>
   <a href="https://github.com/KMueller-Lab/Global-Macro-Database-Matlab" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/MATLAB-Package-EE6C25?style=flat-square&logo=mathworks&logoColor=white" alt="MATLAB package"></a>
+  <a href="https://github.com/KMueller-Lab/Global-Macro-Database-Matlab/actions/workflows/test.yml" target="_blank" rel="noopener noreferrer"><img src="https://github.com/KMueller-Lab/Global-Macro-Database-Matlab/actions/workflows/test.yml/badge.svg" alt="tests"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Non--Commercial-DC2626?style=flat-square" alt="License: Non-Commercial"></a>
 </p>
 
