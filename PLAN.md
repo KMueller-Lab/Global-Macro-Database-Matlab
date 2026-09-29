@@ -127,7 +127,8 @@ otherwise identical.
        routing every fetch and the cache dir to local files) drives `tGmdOffline`
        (27 cases) fully offline; `tGmd` (validation) and `tGmdLive` (network)
        round it out. 41 tests, all green on R2026b.
-7. [ ] Toolbox packaging (`.mltbx`), README polish.
+7. [x] Toolbox packaging: `package_toolbox.m` builds `Global-Macro-Database.mltbx`
+       via ToolboxOptions. Verified install/run/uninstall on R2026b.
 8. [ ] Set the repo description (needs admin) and announce.
 
 ## Implemented modes

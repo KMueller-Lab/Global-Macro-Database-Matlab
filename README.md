@@ -41,8 +41,12 @@ This repository complements the paper, **Müller, Xu, Lehbib, and Chen (2025)**,
 
 **MATLAB package:**
 ```matlab
-% Clone the repository, then add it to the MATLAB path
+% Option 1: clone the repository and add it to the MATLAB path
 addpath('Global-Macro-Database-Matlab')
+
+% Option 2: install the packaged toolbox as an Add-On
+%   double-click Global-Macro-Database.mltbx, or build it yourself with:
+outFile = package_toolbox();   % run from the repository root
 ```
 
 Requires MATLAB R2020b or newer.
