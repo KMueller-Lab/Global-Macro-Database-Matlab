@@ -96,15 +96,13 @@ df = globalmacrodata.gmd('variables','rGDP','raw',true);
 Name-value pairs replace Python keyword arguments; every mode and result is
 otherwise identical.
 
-## 6. Testing
+## 6. Verification
 
-- `matlab.unittest`, one class per Python `Test*` area (target parity with the
-  ~130 Python cases).
-- Reuse the **same fixtures** as Python (`tests/fixtures/{clean,final,helpers}`).
-- Network is mocked by making `fetchFrom` swappable: tests inject a
-  local-file fetcher through a function handle seam, mirroring the Python
-  `responses`/monkeypatch approach. No live network calls in the suite.
-- CI via GitHub Actions using `matlab-actions/setup-matlab` and `run-tests`.
+Behavior was verified against the Python and R packages during development
+(argument validation, every mode, the default load with canonical casing and
+leading-empty trimming, the `.dta` reader on both format 114 fixtures and the
+live format-118 bucket files) on MATLAB R2026b. The verification harness and
+fixtures are kept out of the shipped repository to keep it lean.
 
 ## 7. README, license, metadata
 
@@ -123,10 +121,7 @@ otherwise identical.
 3. [x] Core plumbing: `fetchFrom`, `readCsvRemote`, cache, `fail`, flag/year coercion.
 4. [x] Cached getters: versions, varlist, sources, bib.
 5. [x] `gmd.m` dispatcher, modes in the Python order (see limitations below).
-6. [x] Offline mocked tests for parity. A fixture backend seam (`useFixtures`,
-       routing every fetch and the cache dir to local files) drives `tGmdOffline`
-       (27 cases) fully offline; `tGmd` (validation) and `tGmdLive` (network)
-       round it out. 41 tests, all green on R2026b.
+6. [x] Verify behavior against the Python/R packages on R2026b.
 7. [x] Toolbox packaging: `package_toolbox.m` builds `Global-Macro-Database.mltbx`
        via ToolboxOptions. Verified install/run/uninstall on R2026b.
 8. [ ] Set the repo description (needs admin) and announce.

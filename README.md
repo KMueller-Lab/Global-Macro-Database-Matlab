@@ -18,38 +18,29 @@
 
 This repository complements the paper, **Müller, Xu, Lehbib, and Chen (2025)**, which introduces a panel dataset of **79 macroeconomic variables across 243 countries** from historical records beginning in the year **1086** until **2025**, including projections through the year **2030**.
 
-> **Status:** ported from the Python and R packages and functional. All modes
-> work: data loading with variable, country, and year filters, `version`,
-> `vars`, `sources` (list/load and individual source data), `cite`, `country`,
-> `print_option`, and local caching. Reading the Stata `.dta` files the project
-> publishes is handled by a built-in reader (formats 114/115/117/118), so there
-> is no external dependency. Remaining: toolbox (`.mltbx`) packaging. See
-> [`PLAN.md`](PLAN.md).
-
 ## Features
 
 - **Unparalleled Coverage**: Combines data from more than **121 contemporary and historical sources** (e.g., IMF, World Bank, OECD).
 - **Extensive Variables**: GDP, inflation, government finance, trade, employment, interest rates, and more.
 - **Harmonized Data**: Resolves inconsistencies and splices all available data together.
 - **Scheduled Updates**: Regular releases ensure data reliability.
-- **Full Transparency**: All code is open source and available in this repository.
+- **No Dependencies**: Pure MATLAB, including a built-in reader for the Stata `.dta` files the project publishes.
 - **Accessible Formats**: Provided in `.dta`, `.csv` and as **<a href="https://github.com/KMueller-Lab/Global-Macro-Database-Stata" target="_blank" rel="noopener noreferrer">Stata</a>/<a href="https://github.com/KMueller-Lab/Global-Macro-Database-Python" target="_blank" rel="noopener noreferrer">Python</a>/<a href="https://github.com/KMueller-Lab/Global-Macro-Database-R" target="_blank" rel="noopener noreferrer">R</a>/<a href="https://github.com/KMueller-Lab/Global-Macro-Database-Matlab" target="_blank" rel="noopener noreferrer">MATLAB</a> package**.
 
 ## Installation
 
 <a href="https://www.globalmacrodata.com/data.html" target="_blank" rel="noopener noreferrer">Download via website</a>
 
-**MATLAB package:**
+Requires MATLAB R2020b or newer.
+
 ```matlab
 % Option 1: clone the repository and add it to the MATLAB path
 addpath('Global-Macro-Database-Matlab')
 
 % Option 2: install the packaged toolbox as an Add-On
-%   double-click Global-Macro-Database.mltbx, or build it yourself with:
-outFile = package_toolbox();   % run from the repository root
+%   double-click Global-Macro-Database.mltbx, or build it from the repo root:
+outFile = package_toolbox();
 ```
-
-Requires MATLAB R2020b or newer.
 
 ## Usage
 

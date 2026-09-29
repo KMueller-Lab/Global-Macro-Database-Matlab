@@ -5,19 +5,6 @@ function ok = fetchFrom(relPath, destFile, bases)
 %   Ports the Python _fetch_from behavior. Throws GMD:fetch if every base and
 %   attempt fails. The GitHub mirror only serves helpers/* tables.
 
-    % Test seam: when a fixture root is set, serve files from disk instead of
-    % the network (mirrors the Python monkeypatched _fetch_* backend).
-    root = gmdBackend('get');
-    if ~isempty(root)
-        src = fullfile(root, strrep(relPath, '/', filesep));
-        if ~exist(src, 'file')
-            error('GMD:fetch', 'Local test resource not found: %s', src);
-        end
-        copyfile(src, destFile);
-        ok = true;
-        return;
-    end
-
     cfg = gmdConfig();
     if nargin < 3 || isempty(bases)
         bases = cfg.DataBases;
