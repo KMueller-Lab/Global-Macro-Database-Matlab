@@ -26,8 +26,8 @@ function df = gmd(opts)
 %   the print-only modes.
 %
 %   Example:
-%     df = globalmacrodata.gmd('version','2025_12', ...
-%              'country',{'USA','CHN'}, 'variables',{'rGDP','infl'});
+%     df = globalmacrodata.gmd('country',{'USA','CHN'}, ...
+%              'variables',{'rGDP','infl'});
 
     arguments
         opts.variables    = []
