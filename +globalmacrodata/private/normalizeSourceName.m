@@ -1,7 +1,8 @@
 function [s, csPrefix] = normalizeSourceName(source)
-%NORMALIZESOURCENAME Convert a CS alias (e.g. "CS1_ARG", "CS10_ITA") to "ARG_1".
-%   Also returns the column prefix inside the file ("CS1"), or '' when the
-%   name is not a CS alias. Ports the Python _normalize_source_name helper.
+%NORMALIZESOURCENAME Convert a CS alias to its file name.
+%   "CS1_ARG" -> "ARG_1", "CS10_ITA" -> "ITA_10". Also returns the column
+%   prefix inside the file ("CS1", "CS10"), or '' when the name is not a CS
+%   alias. Ports the Python _normalize_source_name helper.
 
     s = strtrim(char(source));
     csPrefix = '';

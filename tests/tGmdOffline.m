@@ -133,6 +133,16 @@ classdef tGmdOffline < matlab.unittest.TestCase
             tc.verifyTrue(ismember('CS10_rGDP', df.Properties.VariableNames));
         end
 
+        function sourceCsAliasTrimsWhitespace(tc)
+            df = globalmacrodata.gmd('sources',' CS10_ITA ','variables','CPI');
+            tc.verifyEqual(df.Properties.VariableNames, {'ISO3','year','CS10_CPI'});
+        end
+
+        function sourceCsNearMissNotTranslated(tc)
+            % CS1_ARGX is not a CS alias, so it must not resolve to ARG_1.
+            tc.verifyError(@() globalmacrodata.gmd('sources','CS1_ARGX'), 'GMD:e498');
+        end
+
         function sourceFileNameLoads(tc)
             df = globalmacrodata.gmd('sources','ITA_10');
             tc.verifyTrue(ismember('CS10_CPI', df.Properties.VariableNames));
