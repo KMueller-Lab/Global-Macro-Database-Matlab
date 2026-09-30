@@ -2,7 +2,7 @@ function cfg = gmdConfig()
 %GMDCONFIG Shared constants for the GMD package (ports the module constants
 %   from the Python gmd.py).
 
-    cfg.PackageVersion = '1.2.0';
+    cfg.PackageVersion = '1.0.0';
     cfg.DataBases = { ...
         'https://gmd-releases.s3.ap-southeast-2.amazonaws.com/data', ...
         'https://raw.githubusercontent.com/KMueller-Lab/Global-Macro-Database/refs/heads/main/data'};
