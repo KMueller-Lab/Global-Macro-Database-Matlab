@@ -17,16 +17,16 @@
 
 <p align="center"><a href="https://www.globalmacrodata.com/research-paper.html" target="_blank" rel="noopener noreferrer">Link to paper</a></p>
 
-This repository complements the paper, **Müller, Xu, Lehbib, and Chen (2025)**, which introduces a panel dataset of **79 macroeconomic variables across 243 countries** from historical records beginning in the year **1086** until **2025**, including projections through the year **2030**.
+This repository complements the paper, **Müller, Xu, Lehbib, and Chen (2025)**, which introduces a panel dataset of **46 core macroeconomic variables (provided as 77 harmonized series) across 239 countries and territories** from historical records beginning in the year **1086** until **2025**, including projections through the year **2031**.
 
 ## Features
 
-- **Unparalleled Coverage**: Combines data from more than **121 contemporary and historical sources** (e.g., IMF, World Bank, OECD).
+- **Unparalleled Coverage**: Combines data from **35 contemporary sources** (e.g., IMF, World Bank, OECD) and **132 historical datasets**, totaling **167 sources**.
 - **Extensive Variables**: GDP, inflation, government finance, trade, employment, interest rates, and more.
 - **Harmonized Data**: Resolves inconsistencies and splices all available data together.
 - **Scheduled Updates**: Regular releases ensure data reliability.
 - **No Dependencies**: Pure MATLAB, including a built-in reader for the Stata `.dta` files the project publishes.
-- **Accessible Formats**: Provided in `.dta`, `.csv` and as **<a href="https://github.com/KMueller-Lab/Global-Macro-Database-Stata" target="_blank" rel="noopener noreferrer">Stata</a>/<a href="https://github.com/KMueller-Lab/Global-Macro-Database-Python" target="_blank" rel="noopener noreferrer">Python</a>/<a href="https://github.com/KMueller-Lab/Global-Macro-Database-R" target="_blank" rel="noopener noreferrer">R</a>/<a href="https://github.com/KMueller-Lab/Global-Macro-Database-Matlab" target="_blank" rel="noopener noreferrer">MATLAB</a> package**.
+- **Accessible Formats**: Provided in `.dta`, `.csv` and as **<a href="https://github.com/KMueller-Lab/Global-Macro-Database-Stata" target="_blank" rel="noopener noreferrer">Stata</a>/<a href="https://github.com/KMueller-Lab/Global-Macro-Database-Python" target="_blank" rel="noopener noreferrer">Python</a>/<a href="https://github.com/KMueller-Lab/Global-Macro-Database-R" target="_blank" rel="noopener noreferrer">R</a>/<a href="https://github.com/KMueller-Lab/Global-Macro-Database-Matlab" target="_blank" rel="noopener noreferrer">MATLAB</a>/<a href="https://github.com/KMueller-Lab/Global-Macro-Database-Julia" target="_blank" rel="noopener noreferrer">Julia</a> package**.
 
 ## Installation
 
@@ -68,7 +68,7 @@ outFile = package_toolbox();
 df = globalmacrodata.gmd();
 
 % Get data from a specific version
-df = globalmacrodata.gmd('version', '2025_12');
+df = globalmacrodata.gmd('version', '2026_09');
 
 % List all available versions
 globalmacrodata.gmd('version', 'list');
@@ -117,7 +117,6 @@ bibTable = globalmacrodata.gmd('cite', 'load');
 
 % Combine parameters
 df = globalmacrodata.gmd( ...
-    'version', '2025_12', ...
     'country', {'USA', 'CHN'}, ...
     'variables', {'rGDP', 'unemp', 'CPI'});
 ```
@@ -128,7 +127,7 @@ df = globalmacrodata.gmd( ...
 |-----------|------|-------------|
 | **variables** | char or cellstr | Variable code(s) to include (e.g., `'rGDP'` or `{'rGDP', 'unemp'}`) |
 | **country** | char or cellstr | ISO3 country code(s) (e.g., `'SGP'` or `{'MRT', 'SGP'}`). Use `'list'` to print or `'load'` to return the country table |
-| **version** | char | Dataset version in format `'YYYY_MM'` (e.g., `'2025_12'`). Use `'current'` for the latest version, `'list'` to see all available versions |
+| **version** | char | Dataset version in format `'YYYY_MM'` (e.g., `'2026_09'`). Use `'current'` for the latest version, `'list'` to see all available versions |
 | **start_year** | numeric | Keep only rows with `year >= start_year` |
 | **end_year** | numeric | Keep only rows with `year <= end_year` |
 | **raw** | logical | If `true`, download raw source-level data for a single variable |
