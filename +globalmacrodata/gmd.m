@@ -434,13 +434,7 @@ function df = dropAllMissingColumns(df)
 end
 
 function out = loadSourceData(srcName, anything, countryArg)
-    csColPrefix = '';
-    name = strtrim(srcName);
-    if numel(name) == 7 && startsWith(name, 'CS')
-        parts = strsplit(name, '_');
-        csColPrefix = parts{1};
-        name = normalizeSourceName(name);
-    end
+    [name, csColPrefix] = normalizeSourceName(srcName);
     srcTokens = tokens(name);
     if numel(srcTokens) > 1
         fail(498, 'Warning: Please specify exactly one source.');

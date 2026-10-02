@@ -121,6 +121,44 @@ classdef tGmdOffline < matlab.unittest.TestCase
             tc.verifyTrue(ismember('CS1_M3_GDP', df.Properties.VariableNames));
         end
 
+        function sourceCsAliasTwoDigitSlot(tc)
+            % CS10_ITA normalizes to source ITA_10 with data columns prefixed CS10_.
+            df = globalmacrodata.gmd('sources','CS10_ITA','variables','CPI');
+            tc.verifyEqual(df.Properties.VariableNames, {'ISO3','year','CS10_CPI'});
+            tc.verifyEqual(height(df), 10);
+        end
+
+        function sourceCsAliasIgnoresCase(tc)
+            df = globalmacrodata.gmd('sources','cs10_ita');
+            tc.verifyTrue(ismember('CS10_rGDP', df.Properties.VariableNames));
+        end
+
+        function sourceCsAliasTrimsWhitespace(tc)
+            df = globalmacrodata.gmd('sources',' CS10_ITA ','variables','CPI');
+            tc.verifyEqual(df.Properties.VariableNames, {'ISO3','year','CS10_CPI'});
+        end
+
+        function sourceCsNearMissNotTranslated(tc)
+            % CS1_ARGX is not a CS alias, so it must not resolve to ARG_1.
+            tc.verifyError(@() globalmacrodata.gmd('sources','CS1_ARGX'), 'GMD:e498');
+        end
+
+        function sourceFileNameLoads(tc)
+            df = globalmacrodata.gmd('sources','ITA_10');
+            tc.verifyTrue(ismember('CS10_CPI', df.Properties.VariableNames));
+        end
+
+        function sourceCsAliasUnknownVariableListsCodes(tc)
+            % The error lists the codes with the CS10_ prefix stripped.
+            try
+                globalmacrodata.gmd('sources','CS10_ITA','variables','M3');
+                tc.verifyFail('Expected error GMD:e498.');
+            catch ME
+                tc.verifyEqual(ME.identifier, 'GMD:e498');
+                tc.verifySubstring(ME.message, 'It has data on CPI nGDP rGDP.');
+            end
+        end
+
         function invalidSourceRaises(tc)
             tc.verifyError(@() globalmacrodata.gmd('sources','NOPE'), 'GMD:e498');
         end
