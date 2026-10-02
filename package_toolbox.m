@@ -13,7 +13,7 @@ function outFile = package_toolbox()
 
     opts = matlab.addons.toolbox.ToolboxOptions(here, identifier);
     opts.ToolboxName    = 'GMD Matlab';
-    opts.ToolboxVersion = '1.0.0';
+    opts.ToolboxVersion = '1.2.0';
     opts.Summary        = 'MATLAB access to the Global Macro Database.';
     opts.Description    = [ ...
         'A single function, globalmacrodata.gmd, fetches macroeconomic data ', ...
